@@ -1,0 +1,311 @@
+// Federico Vazquez
+// 000771783
+// 1/29/2022
+// 1/29/2022
+// Lets user enter employee name, ID number, position, and department
+
+
+
+
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+
+namespace _3343_VazquezF_Lab01
+{
+    public partial class MainForm : Form
+    {
+        // declare List to store Employee objects
+
+        List<Employee> employeeList = new List<Employee>();
+
+        public MainForm()
+        {
+            InitializeComponent();
+        }
+        private void ListEmployeesBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // get index of the selected list item
+
+            int index = listEmployeesBox.SelectedIndex;
+
+            // create an object of the EmployeesDetailsForm
+
+            EmployeeDetailsForm employeeForm = new EmployeeDetailsForm();
+
+
+
+            // display employeee information
+
+
+            employeeForm.nameLabelBox.Text = employeeList[index].Name;
+            employeeForm.numberLabelBox.Text = employeeList[index].ID.ToString();
+            employeeForm.departmentLabelBox.Text = employeeList[index].Department;
+            employeeForm.positionLabelBox.Text = employeeList[index].Position;
+
+
+            // show details form
+
+            employeeForm.Show(); 
+            
+           
+        }
+
+      
+        
+
+        private void AddButton_Click(object sender, EventArgs e)
+        {
+
+         
+
+
+            // assigns value to name
+            
+            string employeeName;
+            if (nameTextBox.Text !="")
+            {
+                // assigns value to name
+                employeeName = nameTextBox.Text;
+
+                // if block for employee ID
+                if(int.TryParse(numberIDTextBox.Text, out int employeeID))
+                {
+                    // checks if ID number is greater than 0
+                    if (employeeID > 0)
+                    {
+                        // if block for department name
+                        if (departmentTextBox.Text !="")
+                        {
+                            string department = departmentTextBox.Text;
+
+                            // if black for position name
+                            if (positionTextBox.Text != "")
+                            {
+                                string position = positionTextBox.Text;
+
+                                // creates employee Ojects
+
+                                Employee myEmployee = new Employee();
+
+
+
+                                // assigns values using Properties
+
+                                myEmployee.Name = employeeName;
+                                myEmployee.ID = employeeID;
+                                myEmployee.Department = department;
+                                myEmployee.Position = position;
+
+
+                                // creates Employee Objects using the paramaterized constrcutor - Proporties not included
+                                employeeList.Add(myEmployee);
+
+                                //Employee myEmployee = new Employee(employeeName, employeeID, department, position);
+
+                                // add employee object to the List
+                                listEmployeesBox.Items.Add(myEmployee.Name);
+
+                                // clear textbox controls and set focus
+
+                                nameTextBox.Clear();
+                                numberIDTextBox.Clear();
+                                departmentTextBox.Clear();
+                                positionTextBox.Clear();
+                                nameTextBox.Focus();
+
+                            }
+                            // when position is left blank
+                            else
+                            {
+                                MessageBox.Show("Position cannot be left blank");
+                                positionTextBox.Clear();
+                                positionTextBox.Focus();
+
+                            }
+                        }
+                        // when department is left blank
+                        else
+                        {
+                            MessageBox.Show("Department cannot be left blank");
+                            departmentTextBox.Clear();
+                            departmentTextBox.Focus();
+                        }
+                      
+                        
+                    }
+                    // when number is less than 0 for ID number
+                    else
+                    {
+                        MessageBox.Show("Number ID must be greater than 0.");
+                        numberIDTextBox.Clear();
+                        numberIDTextBox.Focus();
+
+                    }
+                }
+                // if non numeric was entered in number ID
+                else
+                {
+                    MessageBox.Show("Number ID must be numeric.");
+                    numberIDTextBox.Clear();
+                    numberIDTextBox.Focus();
+                }
+             
+            }
+            // if name is left blank
+            else
+            {
+                MessageBox.Show("Name cannot be blank.");
+                nameTextBox.Clear();
+                nameTextBox.Focus();
+            }
+            
+        }
+
+        private void ExitButton_Click(object sender, EventArgs e)
+        {
+            // closes the program when user clicks on Exit program
+            this.Close();
+        }
+
+        private void ClearButton_Click(object sender, EventArgs e)
+        {
+            // clears when user clicks on Clear button
+            nameTextBox.Clear();
+            numberIDTextBox.Clear();
+            departmentTextBox.Clear();
+            positionTextBox.Clear();
+            listEmployeesBox.Items.Clear();
+            nameTextBox.Focus();
+
+
+        }
+
+        
+    }
+}
+
+
+// Employee Class Code
+
+// Federico Vazquez
+// 000771783
+// 1/29/2022
+// 1/29/2022
+// Lets user enter employee name, ID number, position, and department
+
+
+using System;
+
+
+namespace _3343_VazquezF_Lab01
+{
+    // class header
+    public class Employee
+    {
+
+
+        // private field declarations 
+
+        private string _employeeName;
+        private int _employeeID;
+        private string _department;
+        private string _position;
+
+
+        // constructors
+        
+        public Employee()
+        {
+           _employeeName = "";
+            _employeeID = 0;
+            _department = "";
+            _position = "";
+        }
+        // paramerterized constructors
+        // each version of the constuctor must have a diffeent name for parameter list
+        public Employee(string employeeName, int employeeID, string department, string position)
+        {
+      
+            _employeeID = employeeID;
+            this._department = department;
+            this._position = position;
+        }
+
+
+
+
+
+
+
+        // Employee Name property
+
+        public string Name
+        {
+            get
+            {
+                return _employeeName;
+            }
+            set
+            {
+                _employeeName = value;
+            }
+
+
+        }
+
+        // ID number property
+
+        public int ID
+        {
+            get
+            {
+                return _employeeID;
+            }
+            set
+            {
+                _employeeID = value;
+            }
+
+
+        }
+
+        
+
+
+        // department property
+
+        public string Department
+        {
+            get
+            {
+                return _department;
+            }
+            set
+            {
+                _department = value;
+            }
+
+
+        }
+        // position property
+        public string Position
+        {
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                _position = value;
+            }
+
+
+
+
+        }
+
+      
+        
+    }
+}
