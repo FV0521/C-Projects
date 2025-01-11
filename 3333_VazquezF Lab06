@@ -1,0 +1,240 @@
+// Federico Vazquez
+// 000771783
+// 11/15/2022
+// 11/15/2022
+// Hospital Charges; lets the user enter the amount of days, charges, and outputs the results using methods 
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace _3333_VazquezF_Lab06
+{
+    public partial class Form1 : Form
+    {
+        private readonly decimal misc = 0;
+
+
+        // fields
+        public int HOSPITAL_STAY_CHARGE { get; private set; }
+        public double HOSPITAL_STAY_CHARGES { get; private set; }
+        public double MiscCharges { get; set; }
+
+        // CalcMisc Charges receving four arguements represenintg values of medication charges, amount\
+        // of surgical charges, amount of lab fees, and physical rehab charges and calculates and retunrs total
+        private double CalcMiscCharges(double chargesMedication, double chargesSurgery, double labFees, double rehabFees)
+        {
+            return chargesMedication + chargesSurgery + labFees + rehabFees;
+        }
+
+        // DetermineMemberShipLebel recing one argyement
+
+        private void DisplayMembershipLevel(double total)
+        {
+            if (total >= 1 && total <= 999.99)
+                membershipLevelLabelBox.Text = "Bronze";
+            else if (total >= 1000 && total <= 1499.99)
+                membershipLevelLabelBox.Text = "Silver";
+            else if (total >= 1500 && total <= 1999.99)
+                membershipLevelLabelBox.Text = "Gold";
+            else
+                membershipLevelLabelBox.Text = "Platinum";
+        }
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void ClearButton_Click(object sender, EventArgs e)
+        {
+            // clear button clears all controls, and sets focus to daysHospitalTextBox
+            daysInHospitalTextBox.Clear();
+            chargesMedicationTextBox.Clear();
+            surgicalChargesTextBox.Clear();
+            labFeesTextBox.Clear();
+            physicalRehabTextBox.Clear();
+            stayChargesLabelBox.Text = "";
+            miscChargesLabelBox.Text = "";
+            totalCostLabelBox.Text = "";
+            membershipLevelLabelBox.Text = "";
+            daysInHospitalTextBox.Focus();
+        }
+
+        private void ExitButton_Click(object sender, EventArgs e)
+        {
+            // closes the program's form
+            this.Close();
+        }
+
+        private void CalculateButton_Click(object sender, EventArgs eventArgs)
+        {
+
+            // variables 
+            const decimal HOSPITAL_STAY_CHARGE = 350m;
+            double stayCharges;
+            double totalCharges;
+
+
+            // if statement for daysInHospitalTextBox
+            if (int.TryParse(daysInHospitalTextBox.Text, out int daysHospital))
+            {
+
+                // nested if to determine if daysHospital is greater than 0
+                if (daysHospital >= 1)
+
+                {
+                    // nested if for chargeMedications
+                    if (double.TryParse(chargesMedicationTextBox.Text, out double chargesMedication))
+
+
+                    {
+                        // nested if to determine if chargeMedication is greater than 0
+                        if (chargesMedication >= 0)
+                        {
+
+                        }
+                        // else block to state that the input is invalid
+                        else
+                        {
+                            MessageBox.Show("Medication charges must be greater than or equal to zero.");
+                            chargesMedicationTextBox.Clear();
+                            chargesMedicationTextBox.Focus();
+                        }
+                        //  if statement for surgicalChargesTextBox
+                        if (double.TryParse(surgicalChargesTextBox.Text, out double chargesSurgery))
+                        {
+                            // nested if to determine if chargesSurgery is greater than 0
+                            if (chargesSurgery >= 0)
+                            {
+
+                            }
+                            // else statement stating that the surgery charges are invalid input
+                            else
+                            {
+                                MessageBox.Show("Surgery charges must be greater than or equal to zero.");
+                                surgicalChargesTextBox.Clear();
+                                surgicalChargesTextBox.Focus();
+                            }
+
+                            // if statement for labFees
+                            if (double.TryParse(labFeesTextBox.Text, out double labFees))
+
+                            {
+                                if (labFees >= 0)
+                                {
+
+                                }
+                                // else statement when a 0 or negative number is entered for labFeesTextbox
+                                else
+                                {
+                                    MessageBox.Show("Lab fees must be greater than or equal to zero");
+                                    labFeesTextBox.Clear();
+                                    labFeesTextBox.Focus();
+                                }
+                                if (double.TryParse(physicalRehabTextBox.Text, out double rehabFees))
+                                {
+                                    if (rehabFees >= 0)
+                                    {
+                                        // Method call for CalcStayCharges passes one arguement
+                                        stayCharges = CalcMiscCharges(chargesMedication, chargesSurgery, labFees, rehabFees);
+
+                                        //Method call for CalcMisccharges passes four arguements
+                                        MiscCharges = CalcMiscCharges(chargesMedication, chargesSurgery, labFees, rehabFees);
+
+                                        // Method call for CalcTotalCharges passes 2 arguements
+
+                                        totalCharges = (double)(HOSPITAL_STAY_CHARGE * misc);
+                                        // Method call for determining membership level
+
+                                        // code for output 
+                                        daysInHospitalTextBox.Text = daysHospital.ToString("n0");
+                                        chargesMedicationTextBox.Text = chargesMedication.ToString("n2");
+                                        surgicalChargesTextBox.Text = chargesSurgery.ToString("n2");
+                                        labFeesTextBox.Text = labFees.ToString("n2");
+                                        physicalRehabTextBox.Text = rehabFees.ToString("n2");
+                                        stayChargesLabelBox.Text = stayCharges.ToString("n2");
+                                        miscChargesLabelBox.Text = MiscCharges.ToString("n2");
+                                        totalCostLabelBox.Text = totalCharges.ToString("n2");
+                                        DisplayMembershipLevel(totalCharges);
+
+                                    }
+
+
+
+
+
+                                    // else statement when user enters a 0 or negative number for rehabFees
+                                    else
+                                    {
+                                        MessageBox.Show("Rehab fees must be greater than or equal to zero.");
+                                        physicalRehabTextBox.Clear();
+                                        physicalRehabTextBox.Focus();
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    // else statement for invalid entry of lab fees
+                                    MessageBox.Show("Invalid input for lab fees. It must be numeric.");
+                                    labFeesTextBox.Clear();
+                                    labFeesTextBox.Focus();
+                                }
+                            }
+                            else
+                            {
+                                // else statement for invalid input of lab fees
+                                MessageBox.Show("Invalid input for lab fees. It must be numeric.");
+                                labFeesTextBox.Clear();
+                                labFeesTextBox.Focus();
+
+
+                            }
+                        }
+                        else
+                        {
+                            // else statement for invalid input for surgical charges
+                            MessageBox.Show("Invalid input for surgical charges. It must be numeric.");
+                            surgicalChargesTextBox.Clear();
+                            surgicalChargesTextBox.Focus();
+                        }
+                    }
+                    else
+                    {
+                        // else statement when invalid input for medication charges is entered
+                        MessageBox.Show("Invalid input for surigcal charges. It must be numeric");
+                        surgicalChargesTextBox.Clear();
+                        surgicalChargesTextBox.Focus();
+                    }
+
+                }
+                else
+                {
+                    // invalid entry error when 0 or negative number is entered as input for days in hospital
+                    MessageBox.Show("Days in hospital must be greater than zero");
+                    daysInHospitalTextBox.Clear();
+                    daysInHospitalTextBox.Focus();
+                }
+            }
+            else
+            {
+                // else statement when invalid entry is inputed for days in hospital
+                MessageBox.Show("Invalid input for days in hospital. It must be a whole number.");
+                daysInHospitalTextBox.Clear();
+                daysInHospitalTextBox.Focus();
+            }
+
+
+
+
+
+
+        }
+    }
+}
