@@ -1,25 +1,141 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32802.440
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3333_VazquezF_Lab03", "3333_VazquezF_Lab03\3333_VazquezF_Lab03.csproj", "{72251EEC-A785-423B-8FED-90687F5676DB}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{72251EEC-A785-423B-8FED-90687F5676DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{72251EEC-A785-423B-8FED-90687F5676DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{72251EEC-A785-423B-8FED-90687F5676DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{72251EEC-A785-423B-8FED-90687F5676DB}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {911D2F4E-08AB-4677-946C-FEC4E1BF0BB3}
-	EndGlobalSection
-EndGlobal
+﻿// Federico Vazquez
+// 000771783
+// 09/27/2022
+// 09/23/2022
+// Program runs to allow user to enter number of tickets on three textBoxes for different seating classes
+// and calculates revenues, total tickets, total revenues, and keeps an accumulated summary for sum of tickets
+// sum of revenue, and number of transactions
+
+
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace _3333_VazquezF_Lab03
+{
+    public partial class Form1 : Form
+    {
+        // initizlize fields; these retain their values when user clicks 'Clear' button when other values
+        // (local variables) are erased. field's lifetime will exist in memory when program is executed even when
+        // 'Clear' button is clicked
+        private decimal sumRevenue = 0.0m; // sum of revenue label box output
+        private int sumTickets = 0; // sum of tickets in label box output
+        private int countTransactions = 0; // transactions label output box
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void ClearOutputButton_Click(object sender, EventArgs e)
+        {
+            // Clear the form and set focus to first control
+
+            // clears the TextBox controls and label output in Tickets GroupBox
+            classATicketsTextBox.Clear();
+            classBTicketsTextBox.Clear();
+            classCTicketsTextBox.Clear();
+            totalTicketsLabel.Text = "";
+            // clears the Label controls in Revenue GroupBox
+            revenueClassALabel.Text = "";
+            revenueClassBLabel.Text = "";
+            revenueClassCLabel.Text = "";
+            totalRevenueLabel.Text = "";
+            classATicketsTextBox.Focus(); // Focus returns to first textbox control 
+
+
+        }
+
+        private void ExitButton_Click(object sender, EventArgs e)
+        {
+            // closes the program's form
+            this.Close();
+        }
+
+        private void CalculateRevenueButton_Click(object sender, EventArgs e)
+        {
+            try // try block; tries to catch a potential exception and if found, immediately jumps to catch block below
+            {
+
+                // declare variables
+
+                // declare named constant variables for each class ticket's prices
+
+                const decimal CLASS_A_PRICE = 15M; // constant price variable for Class A tickets
+                const decimal CLASS_B_PRICE = 12M; // constant price variable for Class B tickets
+                const decimal CLASS_C_PRICE = 9M; // constant price variable for Class C tickets
+
+                // declare variables for number of tickets for each class type sold, the total tickets sold,
+                // ticket revenues for each class, and total revenue
+
+                int ticketsASold, ticketsBSold, ticketsCSold; // number of tickets sold for each class
+                int totalTicketsSold; // all the tickets added up
+                decimal ticketARevenue, ticketBRevenue, ticketCRevenue; // revenues for each ticket class
+                decimal totalRevenue; // add all the class ticket revenues
+                
+
+                // inputs: assign value from textBoxes in integer Parse Method
+                // for TextBox inputs; converts the string to integer type data
+                ticketsASold = int.Parse(classATicketsTextBox.Text); 
+                ticketsBSold = int.Parse(classBTicketsTextBox.Text);
+                ticketsCSold = int.Parse(classCTicketsTextBox.Text);
+                
+                
+
+                // calculations
+
+                totalTicketsSold = ticketsASold + ticketsBSold + ticketsCSold; // sum total of all tickets sold for each class
+                ticketARevenue = CLASS_A_PRICE * ticketsASold; // constant price ($15) times number of class A tickets sold
+                ticketBRevenue = CLASS_B_PRICE * ticketsBSold; // constant price ($12) times  number of class B tickets sold
+                ticketCRevenue = CLASS_C_PRICE * ticketsCSold; // constant price ($9) times number of class C tickets sold
+                totalRevenue = ticketARevenue + ticketBRevenue + ticketCRevenue; // sum total of each indiviudal revenue for each class
+
+                // accumulation for summary; these still retain their values after clear button because
+                // the private fields were declared above the class
+                
+                sumRevenue += totalRevenue;
+                sumTickets += totalTicketsSold;
+                countTransactions += 1; // counter for number of transactions; adds 1 to 0 from priavte transaction field
+
+                // display outputs after calculations; the data types are converted to string type data
+                // with the ToString Method in their respective label control boxes
+
+                totalTicketsLabel.Text = totalTicketsSold.ToString("n0");
+                revenueClassALabel.Text = ticketARevenue.ToString("c");
+                revenueClassBLabel.Text = ticketBRevenue.ToString("c");
+                revenueClassCLabel.Text = ticketCRevenue.ToString("c");
+                totalRevenueLabel.Text = totalRevenue.ToString("c");
+                sumRevenueLabel.Text = sumRevenue.ToString("c");
+                sumTicketsLabel.Text = sumTickets.ToString("n0");
+                transactionsLabel.Text = countTransactions.ToString("n0");
+
+               
+            }
+            catch // catch block; if exception if found from try block, this block catches the exception, and 
+                  // shows a message block error message
+            {
+                // exception handler; catches an error and shows message box
+                // when an invalid data type is entered in one of the text boxes
+                // in Ticket GroupBox
+                // clears anything typed in textboxes and returns focus 
+
+                MessageBox.Show("Input string was not put in correct format.");
+                classATicketsTextBox.Text = "";
+                classBTicketsTextBox.Text = "";
+                classCTicketsTextBox.Text = "";
+                classATicketsTextBox.Focus(); // Focus returns to first textbox
+            }
+
+        }
+
+        
+    }
+}
+
