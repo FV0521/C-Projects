@@ -1,0 +1,241 @@
+// Federico Vazquez
+// 000771783
+// 11/29/2022
+// 11/29/2022
+// donut calculator that lets user enter donuts, select donut type
+// and recieves results of the total donuts, average donuts, and sales (currency)
+
+
+
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace _3333_VazquezF_Lab07
+{
+    public partial class Form1 : Form
+    {
+        // declare list of int for donuts
+
+        private readonly List<int> donuts = new List<int>();
+
+
+        // declare field for total donouts sold
+        private int totalDonutsSold = 0;
+        
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        // exits the form's program under the menu tab
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        // about item in tab mentions who made the program
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Programmed By: Federico Vazquez");
+        }
+        // add donut lets user enter a new donut under the combo box tool
+        private void AddDonutTypeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (donutTypeComboBox.Text != "")
+            {
+                donutTypeComboBox.Items.Add(donutTypeComboBox.Text);
+            }
+            // else block if user fails to enter a donut type
+            else
+            {
+                MessageBox.Show("Enter a donut type.");
+                donutTypeComboBox.Text = "";
+                donutTypeComboBox.Focus();
+            }
+
+                
+        }
+        // remove donut lets the user remove donut type in combo box
+        private void RemoveDonutTypeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // if block to allow user to remove a donut type in combo box
+            if (donutTypeComboBox.Text != "")
+            {
+                donutTypeComboBox.Items.RemoveAt(donutTypeComboBox.SelectedIndex);
+                donutTypeComboBox.Text = "";
+            }
+            // else block when user fails to select a donut type
+            else
+            {
+                MessageBox.Show("Select a donut type.");
+                
+                donutTypeComboBox.Focus();
+            }
+
+
+
+
+        }
+        // lets the user clear all donut types in combo box tool
+        private void ClearAllDonutTypesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            donutTypeComboBox.Items.Clear();
+        }
+        // lets the user display donut type count in message box
+        private void DisplayDonutTypeCountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Count of donunts: " + donutTypeComboBox.Items.Count.ToString());
+        }
+
+        // calculates the total dounts sold, the average donuts sold, and the total sales (in monetary value)
+        private void CalculateButton_Click(object sender, EventArgs e)
+        {
+            
+
+            // declared variables
+             const decimal DONUT_CHARGE = .60m;
+             //int totalDonutsSold;
+             decimal averageDonutsSold;
+
+
+            // convert donuts
+
+
+            // if statement for determing apporpiate data type is an integer for numberDonuts
+            if (int.TryParse(numberDonutsInput.Text, out int numberDonuts))
+            {// if statement used to determine if numberDonuts is greater than 0
+                if(numberDonuts > 0)
+                {
+                    
+
+                    // if statement to determine that the donutTypeComboBox is selected prior to Caluculate button
+                    if (donutTypeComboBox.Text != "")
+                    {
+                        // adds to the donuts list
+                        donuts.Add(numberDonuts);
+
+
+                     
+
+                        // accumulation of donuts
+
+                        totalDonutsSold += numberDonuts;
+
+                        // count the number of donuts
+
+                        int count = donuts.Count;
+
+                        // calculate the average 
+
+                        averageDonutsSold = totalDonutsSold / count;
+
+                        // product of donut sales
+                        decimal totalDonutsSales = DONUT_CHARGE * totalDonutsSold;
+
+
+                        // display output
+
+                        totalDonutsSoldOutput.Text = totalDonutsSold.ToString("n0");
+                        averageDonutsSoldOutput.Text = averageDonutsSold.ToString("n0");
+                        totalDountSalesOutput.Text = totalDonutsSales.ToString("c");
+
+                        // clear text box
+
+                        numberDonutsInput.Clear();
+
+                        // place focus back to text box
+
+                        numberDonutsInput.Focus();
+
+                        // clear text in donutTypeComboBox
+
+                        donutTypeComboBox.Text = "";
+
+                      
+
+
+
+                       
+
+
+
+                    }
+                    // else statement if a donut type was not selected
+                    else
+                    {
+                        MessageBox.Show("Select a donut type.");
+                    }
+                }
+                // else statement if the number entered was less than 0 
+                else
+                {
+                    MessageBox.Show("Donuts must be greater than 0.");
+                }
+            }
+            // else statement for non int data type of donuts
+            else
+            {
+                MessageBox.Show("Invalid entry for number of donuts");
+
+            }
+
+
+        }
+
+        private void DisplayDonutList_Click(object sender, EventArgs e)
+        {
+            // declare local string variable
+
+            string donutsString = "";
+
+            // sort donuts list using Sort method of list class
+
+            donuts.Sort();
+
+            // utilize foreach loop
+
+            foreach (int donut in donuts)
+            {
+                donutsString += "Donuts: " + donut + "\n";
+            }
+
+            // display string in message box
+
+            MessageBox.Show(donutsString, "Donuts");
+
+            // set focus to textbox
+
+            numberDonutsInput.Focus();
+        }
+
+        private void ClearDonutList_Click(object sender, EventArgs e)
+        {
+            // clear items from donuts list
+
+            donuts.Clear();
+
+            // clear textboxes
+
+            numberDonutsInput.Clear();
+            totalDonutsSoldOutput.Text = "";
+            averageDonutsSoldOutput.Text = "";
+            totalDountSalesOutput.Text = "";
+
+            // reset accumualtor to 0
+
+            totalDonutsSold = 0;
+
+            // set focus to textbox
+
+            numberDonutsInput.Focus();
+
+
+        }
+    }
+}
